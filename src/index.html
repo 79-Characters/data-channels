@@ -1,0 +1,65 @@
+<head>
+    <script src="./dist/bundle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <article>
+            <div class="grid">
+                <div>
+                    <span>Status:</span>
+                    <span id="state">Not connected</span>
+                    <div>
+                        <span>Messages Sent: </span>
+                        <span id="messages-sent">0</span>
+                    </div>
+                    <div>
+                        <span>Messages Received: </span>
+                        <span id="messages-received">0</span>
+                    </div>
+                    <div>
+                        <span>Max Received Index: </span>
+                        <span id="messages-max-received-index"></span>
+                    </div>                        
+                    <div>
+                        <span>Messages Dropped: </span>
+                        <span id="messages-dropped">0</span>
+                    </div>
+                    <div>
+                        <span>Messages Out of Order: </span>
+                        <span id="messages-ooo">0</span>
+                    </div>
+                    <div>
+                        <span>Messages Duplicated: </span>
+                        <span id="messages-duplicated">0</span>
+                    </div>     
+                    <div>
+                        <span>Delay (ms): </span>
+                        <span id="message-delay">0</span>
+                    </div>
+                    <div>
+                        <span>Max Delay for Last 50 messages (ms): </span>
+                        <span id="message-delay-max">0</span>
+                    </div>                        
+                </div>
+                <div>
+                    <label>Platform</label>
+                    <select name="platform" id="platform">
+                        <option value="twilio">Twilio</option>
+                        <option value="livekit">LiveKit</option>
+                    </select>
+                    <label>Room Name</label>
+                    <input type="text" id="room-name" placeholder="Room name..." value="xD"/>
+                    <label>Time between messages (ms)</label>
+                    <input type="text" id="message-time" placeholder="100" value="100"/>
+                    <label>Message size</label>
+                    <input type="text" id="message-size" placeholder="100" value="100"/>
+                    <button id="connect">Connect</button>
+                    <button id="start-sending-data">Start Sending Data</button>
+                </div>
+            </div> 
+        </article>
+    </main>
+    <script>main();</script>
+</body>
