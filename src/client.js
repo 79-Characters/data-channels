@@ -21,7 +21,7 @@ let messagesMaxReceivedIndexElem;
 let messageTimeElem;
 let messageSizeElem;
 let messageDelayElem;
-let messageMaxDelayElem;
+let messageMa50Elem;
 
 window.main = function main() {
     document.getElementById("start-sending-data").onclick = toggleSendingData;
@@ -37,7 +37,7 @@ window.main = function main() {
     messageTimeElem = document.getElementById("message-time");
     messageSizeElem = document.getElementById("message-size");
     messageDelayElem = document.getElementById("message-delay");
-    messageMaxDelayElem = document.getElementById("message-delay-max");
+    messageMa50Elem = document.getElementById("message-ma50");
 }
 
 async function connect() {
@@ -144,7 +144,9 @@ function handleReceiveMessage(data) {
 
     delayBuffer.push(delay);
 
-    updateMessageMaxDelay(Math.max(...delayBuffer));
+    const ma50 = Math.round(delayBuffer.reduce((a, b) => a + b) / delayBuffer.length);
+
+    updateMessageMa50(ma50);
 }
 
 async function connectTwilioData(room, token) {
@@ -261,6 +263,6 @@ function updateMessageDelay(value) {
     messageDelayElem.innerText = value;
 }
 
-function updateMessageMaxDelay(value) {
-    messageMaxDelayElem.innerText = value;
+function updateMessageMa50(value) {
+    messageMa50Elem.innerText = value;
 }
