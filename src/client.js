@@ -1,6 +1,7 @@
 import { AgentWalrus } from "@agent-walrus/agent-walrus";
 import TwilioVideo from "twilio-video";
 import { DataPacket_Kind, Room, RoomEvent } from "livekit-client";
+import percentile from "percentile";
 
 let sendingData = false;
 let track;
@@ -21,7 +22,8 @@ let messagesMaxReceivedIndexElem;
 let messageTimeElem;
 let messageSizeElem;
 let messageDelayElem;
-let messageMa50Elem;
+let messageAvgElem;
+let messageDelayMaxElem;
 
 window.main = function main() {
     document.getElementById("start-sending-data").onclick = toggleSendingData;
@@ -37,7 +39,8 @@ window.main = function main() {
     messageTimeElem = document.getElementById("message-time");
     messageSizeElem = document.getElementById("message-size");
     messageDelayElem = document.getElementById("message-delay");
-    messageMa50Elem = document.getElementById("message-ma50");
+    messageAvgElem = document.getElementById("message-delay-avg");
+    messageDelayMaxElem = document.getElementById("message-delay-max");
 }
 
 async function connect() {
@@ -135,18 +138,9 @@ function handleReceiveMessage(data) {
     updateMessagesReceived(messagesReceived.size);
     updateMessagesDropped(maxIndex - messagesReceived.size + 1);
 
-
-    updateMessageDelay(delay);
-
-    if (delayBuffer.length === 50) {
-        delayBuffer.shift();
-    }
-
     delayBuffer.push(delay);
 
-    const ma50 = Math.round(delayBuffer.reduce((a, b) => a + b) / delayBuffer.length);
-
-    updateMessageMa50(ma50);
+    updateMessageDelay(`50th: ${percentile(50, delayBuffer)} 75th: ${percentile(75, delayBuffer)} 99th: ${percentile(99, delayBuffer)}`);
 }
 
 async function connectTwilioData(room, token) {
@@ -261,8 +255,4 @@ function updateMessagesMaxReceivedIndex(value) {
 
 function updateMessageDelay(value) {
     messageDelayElem.innerText = value;
-}
-
-function updateMessageMa50(value) {
-    messageMa50Elem.innerText = value;
 }
